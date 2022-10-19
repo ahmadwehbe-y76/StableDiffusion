@@ -36,7 +36,7 @@ export class AppComponent {
     // }
 
     return await this.http
-      .post('https://35.209.131.22:5000/api/', { prompt: this.prompt })
+      .post('http://35.209.131.22:5000/api/', { prompt: this.prompt })
       .subscribe(
         async (data: any) => {
           this.images = await data;
