@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "site": "stable-diffusion",
+    "public": "dist/stable-diffusion",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
