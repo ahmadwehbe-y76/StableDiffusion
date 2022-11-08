@@ -76,26 +76,6 @@ export class AppComponent {
     });
   }
 
-  async test() {
-    return await this.http
-      .post('http://localhost:5000/predictions', {
-        input: {
-          prompt: 'ahmad',
-        },
-      })
-      .subscribe(
-        async (data: any) => {
-          if (data.status && data.status === 'succeeded') {
-            this.images = await data.output;
-          }
-        },
-        (err) => {
-          this.loading = false;
-          alert('Something went wrong!');
-        }
-      );
-  }
-
   generateClick() {
     if (!this.prompt) {
       alert('Please enter a prompt !');
@@ -108,7 +88,5 @@ export class AppComponent {
       this.getUserData();
     }
   }
-  ngOnInit(): void {
-    this.test();
-  }
+  ngOnInit(): void {}
 }
