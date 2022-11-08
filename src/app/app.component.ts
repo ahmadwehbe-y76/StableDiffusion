@@ -78,7 +78,7 @@ export class AppComponent {
 
   async test() {
     return await this.http
-      .post('/predictions', {
+      .post('http://localhost:5000/predictions', {
         input: {
           prompt: 'ahmad',
         },
