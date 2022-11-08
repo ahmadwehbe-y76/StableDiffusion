@@ -78,15 +78,11 @@ export class AppComponent {
 
   async test() {
     return await this.http
-      .post(
-        'http://35.209.131.22:5000/predictions',
-        {
-          input: {
-            prompt: 'ahmad',
-          },
+      .post('/predictions', {
+        input: {
+          prompt: 'ahmad',
         },
-        { headers: { 'Access-Control-Allow-Origin': '*' } }
-      )
+      })
       .subscribe(
         async (data: any) => {
           if (data.status && data.status === 'succeeded') {
