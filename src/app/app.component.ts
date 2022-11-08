@@ -16,8 +16,17 @@ export class AppComponent {
   images = [];
   progressbarValue = 100;
   curSec: number = 0;
+  advanced = false;
+  samples = 1;
+  steps = 45;
+  scale = 7.5;
+  seed = 1486868319;
 
   constructor(private http: HttpClient) {}
+
+  toggleAdvanced() {
+    this.advanced = !this.advanced;
+  }
 
   async getUserData() {
     this.loading = true;
@@ -36,7 +45,13 @@ export class AppComponent {
     // }
 
     return await this.http
-      .post('http://35.209.131.22:5000/api/', { prompt: this.prompt })
+      .post('http://35.209.131.22:5000/api/', {
+        prompt: this.prompt,
+        samples: this.samples,
+        steps: this.steps,
+        scale: this.scale,
+        seed: this.seed,
+      })
       .subscribe(
         async (data: any) => {
           this.images = await data;
@@ -65,7 +80,11 @@ export class AppComponent {
     if (!this.prompt) {
       alert('Please enter a prompt !');
     } else {
-      this.startTimer(16);
+      if (this.samples === 1) {
+        this.startTimer(16);
+      } else {
+        this.startTimer(30);
+      }
       this.getUserData();
     }
   }
