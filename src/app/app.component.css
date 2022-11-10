@@ -50,6 +50,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  row-gap: 10px;
 }
 .stable-container .container-body i {
   font-size: 40px;
