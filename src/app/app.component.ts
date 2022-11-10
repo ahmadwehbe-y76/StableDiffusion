@@ -21,6 +21,9 @@ export class AppComponent {
   steps = 45;
   scale = 7.5;
   seed = 1486868319;
+  init_image: any = {};
+  files: any = [];
+  strength: any = 0.8;
 
   constructor(private http: HttpClient) {}
 
@@ -28,8 +31,14 @@ export class AppComponent {
     this.advanced = !this.advanced;
   }
 
+  imageUpload(event: any) {
+    this.init_image = event.target.files[0];
+  }
+
   async getUserData() {
     this.loading = true;
+
+    console.log(this.init_image);
 
     // try {
     //   const response = await axios.get('http://35.209.131.22:5000', {
@@ -44,14 +53,21 @@ export class AppComponent {
     //   alert('Something went wrong!');
     // }
 
+    let formData: FormData = new FormData();
+    const data = {
+      prompt: this.prompt,
+      samples: this.samples,
+      steps: this.steps,
+      scale: this.scale,
+      seed: this.seed,
+      strength: this.strength,
+    };
+
+    formData.append('init_image', this.init_image);
+    formData.append('data', JSON.stringify(data));
+
     return await this.http
-      .post('http://35.209.131.22:5000/api/', {
-        prompt: this.prompt,
-        samples: this.samples,
-        steps: this.steps,
-        scale: this.scale,
-        seed: this.seed,
-      })
+      .post('http://35.209.131.22:5000/api/', formData)
       .subscribe(
         async (data: any) => {
           this.images = await data;
@@ -76,6 +92,25 @@ export class AppComponent {
     });
   }
 
+  async test() {
+    var header = {
+      headers: new HttpHeaders().set(
+        'Authorization',
+        `Token 4f1edc5f6a4349eef48c1fe8c8e32023846cb71b`
+      ),
+    };
+
+    axios
+      .post('https://api.replicate.com/v1/predictions', {
+        input: {
+          prompt: 'dog',
+        },
+      })
+      .then((data) => {
+        console.log(data);
+      });
+  }
+
   generateClick() {
     if (!this.prompt) {
       alert('Please enter a prompt !');
@@ -88,5 +123,7 @@ export class AppComponent {
       this.getUserData();
     }
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.test();
+  }
 }
