@@ -118,7 +118,7 @@ export class AppComponent {
       if (this.samples === 1) {
         this.startTimer(16);
       } else {
-        this.startTimer(38);
+        this.startTimer(45);
       }
       this.getUserData();
     }
