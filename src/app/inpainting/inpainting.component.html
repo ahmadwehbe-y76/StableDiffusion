@@ -1,0 +1,81 @@
+<form>
+  <div class="stable-container">
+    <h1 style="text-align: center">Inpainting Image Generator</h1>
+    <mat-progress-bar
+      mode="determinate"
+      [value]="progressbarValue"
+      *ngIf="loading && inpaint_images.length < 1"
+    ></mat-progress-bar>
+
+    <div class="input-button">
+      <input
+        placeholder="Enter your prompt"
+        name="prompt"
+        [(ngModel)]="prompt"
+      />
+      <div class="button" (click)="canvas()">Generate image</div>
+    </div>
+    <div class="container-body">
+      <div class="two-inpaints">
+        <div class="inpaint-container" (click)="clickUpload()">
+          <div class="tools" *ngIf="canvas_image">
+            <i class="fa-solid fa-arrows-rotate" id="reset"></i>
+            <i
+              class="fa-solid fa-xmark"
+              id="remove-image"
+              (click)="removeImage()"
+            ></i>
+          </div>
+          <div class="small-label">Upload</div>
+          <div class="text-center" *ngIf="!canvas_image">Click To Upload</div>
+          <div
+            class="canvas-cont"
+            style="background-image: url('{{ canvas_image }}');"
+          >
+            <div>
+              <app-canvas></app-canvas>
+            </div>
+          </div>
+        </div>
+        <div class="inpaint-container">
+          <div class="small-label">Result</div>
+          <img
+            class="image-inp"
+            *ngIf="inpaint_images.length > 0"
+            src="data:image/jpeg;base64,{{ inpaint_images[0] }}"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- <div
+      class="container-body"
+      style="
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 20px;
+        padding-top: 40px;
+        padding-bottom: 40px;
+      "
+    >
+      <img src="data:image/jpeg;base64" />
+    </div> -->
+  </div>
+</form>
+<div
+  class="stable-container"
+  style="
+    border: none;
+    margin-top: 0px;
+    display: flex;
+    justify-content: space-between;
+  "
+>
+  <div class="advanced" (click)="navigateToText()">Text To Image Generator</div>
+</div>
+<input
+  id="init-image"
+  type="file"
+  (change)="uploadImage($event)"
+  style="visibility: hidden"
+/>

@@ -1,15 +1,15 @@
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { Route, Router, Routes } from '@angular/router';
 import axios from 'axios';
 import { interval } from 'rxjs';
-import * as https from 'https';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  selector: 'app-text-to-image',
+  templateUrl: './text-to-image.component.html',
+  styleUrls: ['./text-to-image.component.css'],
 })
-export class AppComponent {
+export class TextToImageComponent implements OnInit {
   title = 'StableDiffusion';
   prompt = '';
   loading = false;
@@ -26,11 +26,13 @@ export class AppComponent {
   strength: any = 0.8;
   canvas_image = '';
   inpaint_images = [];
-
-  constructor(private http: HttpClient) {}
-
+  constructor(private http: HttpClient, private router: Router) {}
   toggleAdvanced() {
     this.advanced = !this.advanced;
+  }
+
+  navigateToInpaint() {
+    this.router.navigate(['inpainting']);
   }
 
   imageUpload(event: any) {
@@ -141,5 +143,6 @@ export class AppComponent {
       this.getUserData();
     }
   }
+
   ngOnInit(): void {}
 }
