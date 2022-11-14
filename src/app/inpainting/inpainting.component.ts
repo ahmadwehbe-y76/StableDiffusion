@@ -56,6 +56,7 @@ export class InpaintingComponent implements OnInit {
   }
   async canvas() {
     this.loading = true;
+    this.inpaint_images = false;
 
     let canvas = document.getElementById('canvas') as HTMLCanvasElement;
 
