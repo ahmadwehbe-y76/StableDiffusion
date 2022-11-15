@@ -10,9 +10,16 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { InpaintingComponent } from './inpainting/inpainting.component';
 import { TextToImageComponent } from './text-to-image/text-to-image.component';
+import { ImageToImageComponent } from './image-to-image/image-to-image.component';
 
 @NgModule({
-  declarations: [AppComponent, CanvasComponent, InpaintingComponent, TextToImageComponent],
+  declarations: [
+    AppComponent,
+    CanvasComponent,
+    InpaintingComponent,
+    TextToImageComponent,
+    ImageToImageComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

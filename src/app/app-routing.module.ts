@@ -1,3 +1,4 @@
+import { ImageToImageComponent } from './image-to-image/image-to-image.component';
 import { InpaintingComponent } from './inpainting/inpainting.component';
 import { AppComponent } from './app.component';
 import { NgModule } from '@angular/core';
@@ -12,6 +13,10 @@ const routes: Routes = [
   {
     path: 'inpainting',
     component: InpaintingComponent,
+  },
+  {
+    path: 'image-to-image',
+    component: ImageToImageComponent,
   },
 ];
 

@@ -35,6 +35,10 @@ export class TextToImageComponent implements OnInit {
     this.router.navigate(['inpainting']);
   }
 
+  navigateImage() {
+    this.router.navigate(['image-to-image']);
+  }
+
   imageUpload(event: any) {
     this.init_image = event.target.files[0];
   }

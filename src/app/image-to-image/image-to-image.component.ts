@@ -1,32 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import axios from 'axios';
-import * as $ from 'jquery';
 import { interval } from 'rxjs';
+import * as $ from 'jquery';
 
 @Component({
-  selector: 'app-inpainting',
-  templateUrl: './inpainting.component.html',
-  styleUrls: ['./inpainting.component.css'],
+  selector: 'app-image-to-image',
+  templateUrl: './image-to-image.component.html',
+  styleUrls: ['./image-to-image.component.css'],
 })
-export class InpaintingComponent implements OnInit {
+export class ImageToImageComponent implements OnInit {
   canvas_image = '';
   inpaint_images: any = [];
   progressbarValue = 100;
   loading = false;
   curSec: number = 0;
   prompt = '';
-  color: any = 'white';
+  color: any = 'black';
   stroke_size: any = 10;
   mode: any = 'normal';
-
   constructor(private router: Router) {}
-
-  eraseAll() {
-    var c: any = document.getElementById('canvas');
-    var ctx = c.getContext('2d');
-    ctx.clearRect(0, 0, 512, 512);
-  }
 
   penClick() {
     this.mode = 'normal';
@@ -55,8 +48,42 @@ export class InpaintingComponent implements OnInit {
     var ctx = c.getContext('2d');
     ctx.lineWidth = this.stroke_size;
   }
-  navigateImage() {
-    this.router.navigate(['image-to-image']);
+
+  async canvas() {
+    this.loading = true;
+    this.inpaint_images = [];
+
+    let canvas = document.getElementById('canvas') as HTMLCanvasElement;
+
+    let mask_data_url = canvas.toDataURL();
+
+    if (!this.prompt) {
+      this.loading = false;
+
+      alert('Please enter a prompt');
+      return;
+    }
+    if (!mask_data_url) {
+      this.loading = false;
+
+      alert('Please choose a mask image');
+      return;
+    } else {
+      this.startTimer(16);
+      await axios
+        .post('http://35.209.131.22:5000/api/imgtoimg', {
+          prompt: this.prompt,
+          init_image: mask_data_url,
+        })
+        .then(async (response) => {
+          this.inpaint_images = await response.data;
+          this.loading = true;
+        })
+        .catch((error) => {
+          this.loading = false;
+          alert('Something went wrong!');
+        });
+    }
   }
 
   navigateToText() {
@@ -81,6 +108,15 @@ export class InpaintingComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
+  eraseAll() {
+    var c: any = document.getElementById('canvas');
+    var ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, 512, 512);
+  }
+  navigateToInpaint() {
+    this.router.navigate(['inpainting']);
+  }
+
   startTimer(seconds: number) {
     const time = seconds;
     const timer$ = interval(1000);
@@ -94,49 +130,12 @@ export class InpaintingComponent implements OnInit {
       }
     });
   }
-  async canvas() {
-    this.loading = true;
-    this.inpaint_images = false;
-
-    let canvas = document.getElementById('canvas') as HTMLCanvasElement;
-
-    let mask_data_url = canvas.toDataURL();
-
-    if (!this.prompt) {
-      this.loading = false;
-
-      alert('Please enter a prompt');
-      return;
-    }
-    if (!mask_data_url) {
-      this.loading = false;
-
-      alert('Please choose a mask image');
-      return;
-    }
-    if (!this.canvas_image) {
-      this.loading = false;
-
-      alert('Please choose an init image');
-      return;
-    } else {
-      this.startTimer(16);
-      await axios
-        .post('http://35.209.131.22:5000/api/inpainting/', {
-          prompt: this.prompt,
-          mask: mask_data_url,
-          init_image: this.canvas_image,
-        })
-        .then(async (response) => {
-          this.inpaint_images = await response.data;
-          this.loading = true;
-        })
-        .catch((error) => {
-          this.loading = false;
-          alert('Something went wrong!');
-        });
-    }
-  }
 
   ngOnInit(): void {}
+
+  ngAfterViewInit(): void {
+    var c: any = document.getElementById('canvas');
+    var ctx = c.getContext('2d');
+    ctx.strokeStyle = 'black';
+  }
 }

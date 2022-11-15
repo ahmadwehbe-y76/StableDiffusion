@@ -1,6 +1,6 @@
 <form>
   <div class="stable-container">
-    <h1 style="text-align: center">Inpainting Image Generator</h1>
+    <h1 style="text-align: center">Image to Image Generator</h1>
     <mat-progress-bar
       mode="determinate"
       [value]="progressbarValue"
@@ -16,6 +16,7 @@
       <div class="button" (click)="canvas()">Generate image</div>
     </div>
     <div class="canvas-tools">
+      <input type="color" [value]="color" (change)="changeColor($event)" />
       <select
         [value]="stroke_size"
         (change)="changeStrokeSize($event)"
@@ -39,15 +40,20 @@
 
       <i (click)="eraseAll()" class="fa-solid fa-broom eraser"></i>
     </div>
+
     <div class="container-body">
       <div class="two-inpaints">
-        <div class="inpaint-container" (click)="clickUpload()">
-          <div class="small-label">Upload</div>
-          <div class="text-center" *ngIf="!canvas_image">Click To Upload</div>
-          <div
-            class="canvas-cont"
-            style="background-image: url('{{ canvas_image }}');"
-          >
+        <div class="inpaint-container">
+          <div class="tools" *ngIf="canvas_image">
+            <i class="fa-solid fa-arrows-rotate" id="reset"></i>
+            <i
+              class="fa-solid fa-xmark"
+              id="remove-image"
+              (click)="removeImage()"
+            ></i>
+          </div>
+          <div class="small-label">Draw</div>
+          <div class="canvas-cont">
             <div>
               <app-canvas></app-canvas>
             </div>
@@ -88,7 +94,7 @@
   "
 >
   <div class="advanced" (click)="navigateToText()">Text To Image Generator</div>
-  <div class="advanced" (click)="navigateImage()">Image to Image Diffusion</div>
+  <div class="advanced" (click)="navigateToInpaint()">Inpainting Diffusion</div>
 </div>
 <input
   id="init-image"
