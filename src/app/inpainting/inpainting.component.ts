@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import axios from 'axios';
 import * as $ from 'jquery';
 import { interval } from 'rxjs';
+const UndoCanvas = require('./undo-canvas');
 
 @Component({
   selector: 'app-inpainting',
@@ -94,9 +95,21 @@ export class InpaintingComponent implements OnInit {
       }
     });
   }
+  undo() {
+    var c: any = document.getElementById('canvas');
+    var ctx = c.getContext('2d');
+    ctx.undo(50);
+  }
+
+  redo() {
+    var c: any = document.getElementById('canvas');
+    var ctx = c.getContext('2d');
+    ctx.redo(50);
+  }
+
   async canvas() {
     this.loading = true;
-    this.inpaint_images = false;
+    this.inpaint_images = [];
 
     let canvas = document.getElementById('canvas') as HTMLCanvasElement;
 
@@ -139,4 +152,10 @@ export class InpaintingComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  ngAfterViewInit(): void {
+    var c: any = document.getElementById('canvas');
+    var ctx = c.getContext('2d');
+    UndoCanvas.enableUndo(ctx);
+  }
 }

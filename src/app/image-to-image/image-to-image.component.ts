@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import axios from 'axios';
 import { interval } from 'rxjs';
 import * as $ from 'jquery';
+const UndoCanvas = require('./undo-canvas');
 
 @Component({
   selector: 'app-image-to-image',
@@ -19,7 +20,20 @@ export class ImageToImageComponent implements OnInit {
   color: any = 'black';
   stroke_size: any = 10;
   mode: any = 'normal';
+
   constructor(private router: Router) {}
+
+  undo() {
+    var c: any = document.getElementById('canvas');
+    var ctx = c.getContext('2d');
+    ctx.undo(50);
+  }
+
+  redo() {
+    var c: any = document.getElementById('canvas');
+    var ctx = c.getContext('2d');
+    ctx.redo(50);
+  }
 
   penClick() {
     this.mode = 'normal';
@@ -47,6 +61,13 @@ export class ImageToImageComponent implements OnInit {
     var c: any = document.getElementById('canvas');
     var ctx = c.getContext('2d');
     ctx.lineWidth = this.stroke_size;
+  }
+
+  colorBackground() {
+    var canvas: any = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = this.color;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
   async canvas() {
@@ -137,5 +158,6 @@ export class ImageToImageComponent implements OnInit {
     var c: any = document.getElementById('canvas');
     var ctx = c.getContext('2d');
     ctx.strokeStyle = 'black';
+    UndoCanvas.enableUndo(ctx);
   }
 }
