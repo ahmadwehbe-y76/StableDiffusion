@@ -42,19 +42,18 @@
       <i (click)="colorBackground()" class="fa-solid fa-fill-drip eraser"></i>
       <i (click)="undo()" class="fa-solid fa-rotate-left eraser"></i>
       <i (click)="redo()" class="fa-solid fa-rotate-right eraser"></i>
+      <i (click)="clickUpload()" class="fa-solid fa-image eraser"></i>
+      <input
+        id="init-image"
+        style="visibility: hidden"
+        (change)="uploadImage($event)"
+        type="file"
+      />
     </div>
 
     <div class="container-body">
       <div class="two-inpaints">
         <div class="inpaint-container">
-          <div class="tools" *ngIf="canvas_image">
-            <i class="fa-solid fa-arrows-rotate" id="reset"></i>
-            <i
-              class="fa-solid fa-xmark"
-              id="remove-image"
-              (click)="removeImage()"
-            ></i>
-          </div>
           <div class="small-label">Draw</div>
           <div class="canvas-cont">
             <div>

@@ -116,15 +116,21 @@ export class ImageToImageComponent implements OnInit {
   }
 
   clickUpload() {
-    if (!this.canvas_image) {
-      $('#init-image').click();
-    }
+    $('#init-image').click();
   }
   uploadImage(event: any) {
     const file = event.target.files[0];
     const reader: any = new FileReader();
     reader.onloadend = () => {
       this.canvas_image = reader.result;
+      var background = new Image();
+      background.src = this.canvas_image;
+      var c: any = document.getElementById('canvas');
+      var ctx = c.getContext('2d');
+
+      background.onload = function () {
+        ctx.drawImage(background, 0, 0);
+      };
     };
     reader.readAsDataURL(file);
   }
