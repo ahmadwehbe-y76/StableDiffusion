@@ -20,8 +20,20 @@ export class ImageToImageComponent implements OnInit {
   color: any = 'black';
   stroke_size: any = 10;
   mode: any = 'normal';
+  advanced = false;
+  samples = 1;
+  steps = 45;
+  scale = 7.5;
+  seed = 1486868319;
+  init_image: any = {};
+  files: any = [];
+  strength: any = 0.8;
 
   constructor(private router: Router) {}
+
+  toggleAdvanced() {
+    this.advanced = !this.advanced;
+  }
 
   undo() {
     var c: any = document.getElementById('canvas');
@@ -95,6 +107,10 @@ export class ImageToImageComponent implements OnInit {
         .post('http://35.209.131.22:5000/api/imgtoimg', {
           prompt: this.prompt,
           init_image: mask_data_url,
+          steps: this.steps,
+          seed: this.seed,
+          scale: this.scale,
+          strength: this.strength,
         })
         .then(async (response) => {
           this.inpaint_images = await response.data;
@@ -159,6 +175,17 @@ export class ImageToImageComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  editClick() {
+    var background = new Image();
+    background.src = 'data:image/jpeg;base64,' + this.inpaint_images[0];
+    var c: any = document.getElementById('canvas');
+    var ctx = c.getContext('2d');
+
+    background.onload = function () {
+      ctx.drawImage(background, 0, 0);
+    };
+  }
 
   ngAfterViewInit(): void {
     var c: any = document.getElementById('canvas');

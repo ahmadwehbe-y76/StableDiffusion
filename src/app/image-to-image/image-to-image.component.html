@@ -63,11 +63,21 @@
         </div>
         <div class="inpaint-container">
           <div class="small-label">Result</div>
-          <img
-            class="image-inp"
+          <div>
+            <img
+              class="image-inp"
+              *ngIf="inpaint_images.length > 0"
+              src="data:image/jpeg;base64,{{ inpaint_images[0] }}"
+            />
+          </div>
+
+          <div
+            class="edit"
             *ngIf="inpaint_images.length > 0"
-            src="data:image/jpeg;base64,{{ inpaint_images[0] }}"
-          />
+            (click)="editClick()"
+          >
+            Edit
+          </div>
         </div>
       </div>
     </div>
@@ -85,6 +95,96 @@
       <img src="data:image/jpeg;base64" />
     </div> -->
   </div>
+  <div
+    *ngIf="advanced"
+    class="stable-container"
+    style="border: none; margin-top: 0px"
+  >
+    <div class="sliders">
+      <div class="top-sliders">
+        <div class="title-slider">
+          <div class="title">
+            <span>Images</span>
+            <span>{{ samples }}</span>
+          </div>
+          <mat-slider
+            style="width: 100%"
+            min="1"
+            max="2"
+            step="1"
+            [(ngModel)]="samples"
+            thumbLabel
+            name="samples"
+            disabled="true"
+          ></mat-slider>
+        </div>
+        <div class="title-slider">
+          <div class="title">
+            <span>Steps</span> <span>{{ steps }}</span>
+          </div>
+          <mat-slider
+            style="width: 100%"
+            min="1"
+            max="50"
+            step="1"
+            thumbLabel
+            [(ngModel)]="steps"
+            name="steps"
+          ></mat-slider>
+        </div>
+        <div class="title-slider">
+          <div class="title">
+            <span>Guidance Scale</span> <span>{{ scale }}</span>
+          </div>
+          <mat-slider
+            style="width: 100%"
+            min="1"
+            max="50"
+            step="0.1"
+            thumbLabel
+            [(ngModel)]="scale"
+            name="scale"
+          ></mat-slider>
+        </div>
+      </div>
+      <div class="bottom-sliders">
+        <div class="title">
+          <span>Seed</span> <span>{{ seed }}</span>
+        </div>
+        <mat-slider
+          style="width: 100%"
+          min="1"
+          max="2147483647"
+          step="1"
+          [(ngModel)]="seed"
+          name="seed"
+        ></mat-slider>
+      </div>
+      <div class="bottom-sliders">
+        <div class="title">
+          <span>Prompt Strength</span>
+        </div>
+        <input
+          type="number"
+          [(ngModel)]="strength"
+          name="strength"
+          min="0.1"
+          max="10"
+          step="0.1"
+          style="
+            width: 100%;
+            height: 50px;
+            outline: none;
+            border-top-left-radius: 0.5rem;
+            border-bottom-left-radius: 0.5rem;
+            border: 1.5px solid rgb(229 231 235);
+            font-size: 16px;
+            text-indent: 10px;
+          "
+        />
+      </div>
+    </div>
+  </div>
 </form>
 <div
   class="stable-container"
@@ -97,6 +197,7 @@
 >
   <div class="advanced" (click)="navigateToText()">Text To Image Generator</div>
   <div class="advanced" (click)="navigateToInpaint()">Inpainting Diffusion</div>
+  <div class="advanced" (click)="toggleAdvanced()">Advance options</div>
 </div>
 <input
   id="init-image"
